@@ -1,0 +1,10 @@
+{
+  "name": "DevShowcase — Discover. Build. Showcase.",
+  "short_name": "DevShowcase",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#080a0f",
+  "theme_color": "#0b0d12",
+  "description": "Discover and showcase developer projects.",
+  "icons": []
+}
