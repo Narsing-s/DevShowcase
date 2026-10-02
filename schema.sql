@@ -1,26 +1,9 @@
-CREATE TABLE IF NOT EXISTS users (
-  id BIGSERIAL PRIMARY KEY,
-  github_id TEXT UNIQUE NOT NULL,
-  login TEXT NOT NULL,
-  avatar TEXT,
-  created_at TIMESTAMPTZ DEFAULT now(),
-  updated_at TIMESTAMPTZ DEFAULT now()
-);
-CREATE TABLE IF NOT EXISTS projects (
-  id BIGSERIAL PRIMARY KEY,
-  name TEXT NOT NULL,
-  description TEXT NOT NULL DEFAULT '',
-  category TEXT NOT NULL DEFAULT 'Open Source',
-  github_url TEXT UNIQUE NOT NULL,
-  demo_url TEXT,
-  author_id BIGINT REFERENCES users(id) ON DELETE SET NULL,
-  tags JSONB NOT NULL DEFAULT '[]'::jsonb,
-  featured BOOLEAN NOT NULL DEFAULT false,
-  status TEXT NOT NULL DEFAULT 'pending',
-  stars INTEGER NOT NULL DEFAULT 0,
-  forks INTEGER NOT NULL DEFAULT 0,
-  created_at TIMESTAMPTZ DEFAULT now(),
-  updated_at TIMESTAMPTZ DEFAULT now()
-);
-CREATE INDEX IF NOT EXISTS projects_status_idx ON projects(status);
-CREATE INDEX IF NOT EXISTS projects_author_idx ON projects(author_id);
+CREATE TABLE IF NOT EXISTS users (id BIGSERIAL PRIMARY KEY, github_id TEXT UNIQUE NOT NULL, login TEXT NOT NULL, avatar TEXT, bio TEXT DEFAULT '', website TEXT, created_at TIMESTAMPTZ DEFAULT now(), updated_at TIMESTAMPTZ DEFAULT now());
+CREATE TABLE IF NOT EXISTS projects (id BIGSERIAL PRIMARY KEY, name TEXT NOT NULL, description TEXT NOT NULL DEFAULT '', category TEXT NOT NULL DEFAULT 'Open Source', github_url TEXT UNIQUE NOT NULL, demo_url TEXT, author_id BIGINT REFERENCES users(id) ON DELETE SET NULL, tags JSONB NOT NULL DEFAULT '[]'::jsonb, featured BOOLEAN NOT NULL DEFAULT false, status TEXT NOT NULL DEFAULT 'pending', stars INTEGER NOT NULL DEFAULT 0, forks INTEGER NOT NULL DEFAULT 0, views BIGINT NOT NULL DEFAULT 0, created_at TIMESTAMPTZ DEFAULT now(), updated_at TIMESTAMPTZ DEFAULT now());
+CREATE TABLE IF NOT EXISTS follows (follower_id BIGINT REFERENCES users(id) ON DELETE CASCADE, following_id BIGINT REFERENCES users(id) ON DELETE CASCADE, created_at TIMESTAMPTZ DEFAULT now(), PRIMARY KEY(follower_id,following_id), CHECK(follower_id<>following_id));
+CREATE TABLE IF NOT EXISTS project_likes (user_id BIGINT REFERENCES users(id) ON DELETE CASCADE, project_id BIGINT REFERENCES projects(id) ON DELETE CASCADE, created_at TIMESTAMPTZ DEFAULT now(), PRIMARY KEY(user_id,project_id));
+CREATE TABLE IF NOT EXISTS discussions (id BIGSERIAL PRIMARY KEY, author_id BIGINT REFERENCES users(id) ON DELETE CASCADE, title TEXT NOT NULL, message TEXT NOT NULL, topic TEXT NOT NULL DEFAULT 'General', project_url TEXT, status TEXT NOT NULL DEFAULT 'published', created_at TIMESTAMPTZ DEFAULT now(), updated_at TIMESTAMPTZ DEFAULT now());
+CREATE TABLE IF NOT EXISTS discussion_comments (id BIGSERIAL PRIMARY KEY, discussion_id BIGINT REFERENCES discussions(id) ON DELETE CASCADE, author_id BIGINT REFERENCES users(id) ON DELETE CASCADE, message TEXT NOT NULL, created_at TIMESTAMPTZ DEFAULT now());
+CREATE TABLE IF NOT EXISTS notifications (id BIGSERIAL PRIMARY KEY, user_id BIGINT REFERENCES users(id) ON DELETE CASCADE, actor_id BIGINT REFERENCES users(id) ON DELETE SET NULL, type TEXT NOT NULL, entity_id BIGINT, message TEXT NOT NULL, read BOOLEAN NOT NULL DEFAULT false, created_at TIMESTAMPTZ DEFAULT now());
+CREATE TABLE IF NOT EXISTS activity (id BIGSERIAL PRIMARY KEY, user_id BIGINT REFERENCES users(id) ON DELETE CASCADE, type TEXT NOT NULL, entity_id BIGINT, message TEXT NOT NULL, created_at TIMESTAMPTZ DEFAULT now());
+CREATE INDEX IF NOT EXISTS projects_status_idx ON projects(status); CREATE INDEX IF NOT EXISTS projects_author_idx ON projects(author_id); CREATE INDEX IF NOT EXISTS follows_following_idx ON follows(following_id); CREATE INDEX IF NOT EXISTS discussions_created_idx ON discussions(created_at DESC); CREATE INDEX IF NOT EXISTS notifications_user_idx ON notifications(user_id,read,created_at DESC); CREATE INDEX IF NOT EXISTS activity_created_idx ON activity(created_at DESC);
