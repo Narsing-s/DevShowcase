@@ -22,7 +22,7 @@ function sessionUser(req){
   const c=readCookies(req), raw=c.ds_session;
   if(!raw)return null;
   const [payload,sig]=raw.split(".");
-  if(!payload||!sig||!crypto.timingSafeEqual(Buffer.from(sig),Buffer.from(sign(payload))))return null;
+  if(!payload||!sig)return null;const expected=sign(payload);if(sig.length!==expected.length||!crypto.timingSafeEqual(Buffer.from(sig),Buffer.from(expected)))return null;
   try{return JSON.parse(Buffer.from(payload,"base64url").toString())}catch{return null}
 }
 function sessionCookie(user){
