@@ -1,3 +1,4 @@
+const crypto=require("crypto");
 const {json}=require("../_lib");
 module.exports=async(req,res)=>{
  if(req.method!=="GET")return json(res,405,{error:"GET required"});
