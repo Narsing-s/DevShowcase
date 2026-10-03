@@ -17,7 +17,7 @@ function json(res,status,data,headers={}){res.statusCode=status;Object.entries({
 async function body(req){let s="";for await(const c of req)s+=c;return s?JSON.parse(s):{};}
 function pathOf(req){return new URL(req.url,"http://localhost").pathname.replace(/^\/api\/?/,"").replace(/\/$/,"");}
 
-async function health(req,res){if(req.method!=="GET")return json(res,405,{error:"Method not allowed"});try{await db()\`SELECT 1 AS ok\`;return json(res,200,{ok:true,service:"DevShowcase API",database:"connected",timestamp:new Date().toISOString()});}catch(e){return json(res,503,{ok:false,service:"DevShowcase API",database:"unavailable",error:"Database unavailable"});}}
+async function health(req,res){if(req.method!=="GET")return json(res,405,{error:"Method not allowed"});try{const sql=db();await sql\`SELECT 1 AS ok\`;return json(res,200,{ok:true,service:"DevShowcase API",database:"connected",timestamp:new Date().toISOString()});}catch(e){return json(res,503,{ok:false,service:"DevShowcase API",database:"unavailable",error:"Database unavailable"});}}
 function me(req,res){return json(res,200,{user:sessionUser(req)});}
 async function activity(req,res){if(req.method!=="GET")return json(res,405,{error:"Method not allowed"});const sql=db();return json(res,200,{activity:await sql\`SELECT a.id,a.type,a.entity_id,a.message,a.created_at,u.login AS author,u.avatar FROM activity a JOIN users u ON u.id=a.user_id ORDER BY a.created_at DESC LIMIT 100\`});}
 
