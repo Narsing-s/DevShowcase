@@ -372,6 +372,10 @@ Community
 
 ---
 
+## 🧭 What is already wired
+
+The current build includes actionable flows for project discovery, GitHub import, favorites, social actions, discussions/comments, notifications, moderation, opportunities, mentorship, collaboration, resources and event participation. Server-backed community links are validated as HTTP(S), published mentor profiles are used by the mentor directory, and duplicate pending mentorship requests are prevented.
+
 ## 🗺️ Roadmap
 
 ### 🟢 Foundation
@@ -395,7 +399,9 @@ Community
 - [ ] Rich project collections
 - [ ] Saved searches
 - [ ] Collaboration inbox
+- [x] Notification read action
 - [ ] Rich notification center
+- [x] Event interest API
 - [ ] Event registration management
 - [ ] Advanced moderation dashboard
 - [ ] Better project analytics
@@ -454,5 +460,5 @@ See [LICENSE](LICENSE) for the repository's current license.
 
 <p align="center">
   <strong>✦ DevShowcase</strong><br>
-  <sub>Show your work. Find your people. Build what's next.</sub>
+  <sub>Discover projects · meet builders · share knowledge · build what's next.</sub>
 </p>
