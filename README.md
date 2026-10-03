@@ -29,7 +29,26 @@ The goal is not to copy another project. DevShowcase keeps its own visual identi
 
 ## Local run
 
-The frontend can be opened directly as a static site. For server/API features, deploy it to a platform that supports the api/ functions and configure the Neon database connection and GitHub OAuth environment variables used by the API.
+The frontend can be opened directly as a static site. For server/API features, deploy it to a platform that supports the `api/` functions and configure the Neon database connection and GitHub OAuth environment variables used by the API.
+
+### Production setup
+
+1. Create a Neon PostgreSQL database and run the complete `schema.sql` against it. Re-running the file is safe because the tables and indexes use `IF NOT EXISTS`.
+2. Configure the variables listed in `.env.example`: `DATABASE_URL`, `SESSION_SECRET`, `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, `APP_URL`, and `ADMIN_GITHUB_LOGINS`.
+3. Configure the GitHub OAuth callback as `<APP_URL>/api/auth/github/callback`.
+4. Deploy the repository with a platform that supports Node.js serverless functions under `api/`.
+5. After deployment, open the site in a fresh browser session. The PWA service worker uses network-first behavior for `/api/*`, so opportunities, events, resources, mentors and discussions are not trapped in an old cache.
+
+### Community API
+
+- `GET /api/community` — discussions
+- `POST /api/community` — create a discussion
+- `GET /api/community?type=opportunities|resources|events|mentors` — community data
+- `POST /api/community?type=opportunities` — publish an opportunity
+- `POST /api/community?type=interest` — save opportunity interest
+- `POST /api/community?type=resources` — publish a resource
+- `POST /api/community?type=events` — publish an event
+- `POST /api/community?type=mentorship` — request mentorship
 
 ## Data model
 
