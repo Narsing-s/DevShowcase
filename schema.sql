@@ -14,3 +14,32 @@ CREATE TABLE IF NOT EXISTS mentorship_requests (id BIGSERIAL PRIMARY KEY, reques
 CREATE TABLE IF NOT EXISTS resources (id BIGSERIAL PRIMARY KEY, author_id BIGINT REFERENCES users(id) ON DELETE SET NULL, title TEXT NOT NULL, description TEXT NOT NULL DEFAULT '', url TEXT NOT NULL, category TEXT NOT NULL DEFAULT 'Learning', created_at TIMESTAMPTZ DEFAULT now());
 CREATE TABLE IF NOT EXISTS events (id BIGSERIAL PRIMARY KEY, author_id BIGINT REFERENCES users(id) ON DELETE SET NULL, title TEXT NOT NULL, description TEXT NOT NULL DEFAULT '', starts_at TIMESTAMPTZ, url TEXT, created_at TIMESTAMPTZ DEFAULT now());
 CREATE INDEX IF NOT EXISTS opportunities_created_idx ON opportunities(created_at DESC); CREATE INDEX IF NOT EXISTS mentorship_request_status_idx ON mentorship_requests(status); CREATE INDEX IF NOT EXISTS resources_category_idx ON resources(category); CREATE INDEX IF NOT EXISTS events_starts_idx ON events(starts_at);
+
+CREATE TABLE IF NOT EXISTS mentor_profiles (
+  user_id BIGINT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+  headline TEXT NOT NULL DEFAULT '',
+  expertise TEXT NOT NULL DEFAULT '',
+  availability TEXT NOT NULL DEFAULT 'Open to requests',
+  profile_url TEXT,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now()
+);
+CREATE TABLE IF NOT EXISTS collaboration_requests (
+  id BIGSERIAL PRIMARY KEY,
+  requester_id BIGINT REFERENCES users(id) ON DELETE CASCADE,
+  title TEXT NOT NULL,
+  message TEXT NOT NULL DEFAULT '',
+  technology TEXT NOT NULL DEFAULT '',
+  url TEXT,
+  status TEXT NOT NULL DEFAULT 'open',
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now()
+);
+CREATE TABLE IF NOT EXISTS event_attendees (
+  event_id BIGINT REFERENCES events(id) ON DELETE CASCADE,
+  user_id BIGINT REFERENCES users(id) ON DELETE CASCADE,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  PRIMARY KEY(event_id,user_id)
+);
+CREATE INDEX IF NOT EXISTS mentor_profiles_expertise_idx ON mentor_profiles(expertise);
+CREATE INDEX IF NOT EXISTS collaboration_requests_created_idx ON collaboration_requests(created_at DESC);
