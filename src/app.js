@@ -119,8 +119,9 @@ function localApi(url,options={}){
    }
    if(!key){const rows=read("discussions");const row={...d,id:id(),author:currentUser.login,avatar:currentUser.avatar,created_at:now()};rows.unshift(row);write("discussions",rows);const a=read("activity");a.unshift({id:id(),message:currentUser.login+" started a discussion",created_at:now()});write("activity",a);return {id:row.id};}
    if(key==="opportunities"){const rows=read("opportunities");const row={...d,id:id(),author:currentUser.login,created_at:now()};rows.unshift(row);write("opportunities",rows);return {opportunity:row};}
-   if(key==="interest"){const rows=read("interests");rows.push({...d,id:id(),user_id:currentUser.id,created_at:now()});write("interests",rows);return {ok:true};}
-   if(key==="mentorship"||key==="mentor"){const rows=read("mentorshipRequests");rows.push({...d,id:id(),requester_id:currentUser.id,status:"pending",created_at:now()});write("mentorshipRequests",rows);return {ok:true};}
+   if(key==="interest"){const rows=read("interests");if(rows.some(x=>String(x.user_id)===String(currentUser.id)&&String(x.opportunity_id||"")===String(d.opportunity_id||"")&&String(x.opportunity_name||"")===String(d.opportunity_name||"")))return {ok:true,duplicate:true};rows.push({...d,id:id(),user_id:currentUser.id,created_at:now()});write("interests",rows);return {ok:true};}
+   if(key==="mentorship"||key==="mentor"){const rows=read("mentorshipRequests");if(rows.some(x=>String(x.requester_id)===String(currentUser.id)&&String(x.mentor_id||"")===String(d.mentor_id||"")&&x.status==="pending"))return {ok:true,duplicate:true};rows.push({...d,id:id(),requester_id:currentUser.id,status:"pending",created_at:now()});write("mentorshipRequests",rows);return {ok:true};}
+   if(key==="collaborate"){const rows=read("collaborationRequests");rows.unshift({...d,id:id(),requester_id:currentUser.id,status:"open",created_at:now()});write("collaborationRequests",rows);return {ok:true};}
    if(key==="resources"||key==="events"){const rows=read(key);const row={...d,id:id(),author:currentUser.login,created_at:now()};rows.unshift(row);write(key,rows);return {[key.slice(0,-1)]:row};}
    return {ok:true};
  }
