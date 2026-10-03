@@ -45,6 +45,20 @@ module.exports=async(req,res)=>{
    const rows=await sql\`INSERT INTO events(author_id,title,description,starts_at,url) VALUES(\${user.id},\${String(d.title).slice(0,160)},\${String(d.description||"").slice(0,3000)},\${starts},\${d.url?String(d.url).slice(0,1000):null}) RETURNING *\`;
    return json(res,201,{event:rows[0]});
   }
+  if(type==="mentor"){
+   const headline=String(d.title||"Community Mentor").slice(0,160);
+   const expertise=String(d.tech||"").slice(0,500);
+   const availability="Open to requests";
+   const profileUrl=d.url?String(d.url).slice(0,500):null;
+   await sql`INSERT INTO mentor_profiles(user_id,headline,expertise,availability,profile_url) VALUES(${user.id},${headline},${expertise},${availability},${profileUrl}) ON CONFLICT(user_id) DO UPDATE SET headline=EXCLUDED.headline,expertise=EXCLUDED.expertise,profile_url=EXCLUDED.profile_url,updated_at=now()`;
+   return json(res,201,{ok:true,mentor:true});
+  }
+  if(type==="collaborate"){
+   if(!d.title||!d.message)return json(res,400,{error:"title and message are required"});
+   const rows=await sql`INSERT INTO collaboration_requests(requester_id,title,message,technology,url) VALUES(${user.id},${String(d.title).slice(0,160)},${String(d.message).slice(0,3000)},${String(d.tech||"").slice(0,500)},${d.url?String(d.url).slice(0,500):null}) RETURNING *`;
+   await sql`INSERT INTO activity(user_id,type,entity_id,message) VALUES(${user.id},'collaboration',${rows[0].id},'created a collaboration request')`;
+   return json(res,201,{request:rows[0]});
+  }
   if(type==="mentorship"){
    const mentorId=Number(d.mentor_id);
    if(!Number.isInteger(mentorId)||mentorId<1)return json(res,400,{error:"valid mentor_id is required"});
