@@ -140,3 +140,15 @@ async function commentOn(id){if(!currentUser){alert("Sign in with GitHub first."
 async function newDiscussion(){if(!currentUser){alert("Sign in with GitHub first.");return}const title=prompt("Discussion title:");if(!title)return;const message=prompt("What would you like to discuss?");if(!message)return;const topic=prompt("Topic:","General")||"General";try{await apiJSON("/api/community",{method:"POST",body:JSON.stringify({title,message,topic})});closeModal();await loadSocial();alert("Discussion published.");}catch(e){alert(e.message)}}
 async function markNotifications(){try{await apiJSON("/api/notifications",{method:"PATCH"});loadSocial()}catch(e){alert(e.message)}}
 renderOpportunities();renderCommunityCollections();\n
+async function joinOpportunityId(id){
+ if(!currentUser)enableLocalMode();
+ try{await apiJSON("/api/community?type=interest",{method:"POST",body:JSON.stringify({opportunity_id:id})});alert("Interest saved.");renderOpportunities();}
+ catch(e){alert(e.message)}
+}
+async function requestMentorId(id){
+ if(!currentUser)enableLocalMode();
+ const topic=prompt("What would you like mentorship on?","General"); if(!topic)return;
+ const message=prompt("Add a short message:","I would like to connect and learn."); if(message===null)return;
+ try{await apiJSON("/api/community?type=mentorship",{method:"POST",body:JSON.stringify({mentor_id:id,topic,message})});alert("Mentorship request saved.");}
+ catch(e){alert(e.message)}
+}
