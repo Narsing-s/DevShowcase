@@ -9,8 +9,8 @@ module.exports=async(req,res)=>{
    }
    if(type==="opportunities"){const rows=await sql\`SELECT o.*,u.login AS author,u.avatar FROM opportunities o LEFT JOIN users u ON u.id=o.author_id WHERE o.status='published' ORDER BY o.created_at DESC LIMIT 100\`;return json(res,200,{opportunities:rows});}
    if(type==="resources"){const rows=await sql\`SELECT r.*,u.login AS author,u.avatar FROM resources r LEFT JOIN users u ON u.id=r.author_id ORDER BY r.created_at DESC LIMIT 100\`;return json(res,200,{resources:rows});}
-   if(type==="events"){const rows=await sql\`SELECT e.*,u.login AS author,u.avatar FROM events e LEFT JOIN users u ON u.id=e.author_id ORDER BY e.starts_at NULLS LAST,e.created_at DESC LIMIT 100\`;return json(res,200,{events:rows});}
-   if(type==="mentors"){const rows=await sql\`SELECT id,login,avatar,bio,website FROM users ORDER BY login LIMIT 100\`;return json(res,200,{mentors:rows});}
+   if(type==="events"){const rows=await sql`SELECT e.*,u.login AS author,u.avatar,(SELECT count(*) FROM event_attendees a WHERE a.event_id=e.id) AS attendees FROM events e LEFT JOIN users u ON u.id=e.author_id ORDER BY e.starts_at NULLS LAST,e.created_at DESC LIMIT 100`;return json(res,200,{events:rows});}
+   if(type==="mentors"){const rows=await sql`SELECT u.id,u.login,u.avatar,u.bio,u.website,mp.headline,mp.expertise,mp.availability,mp.profile_url FROM mentor_profiles mp JOIN users u ON u.id=mp.user_id ORDER BY mp.updated_at DESC LIMIT 100`;return json(res,200,{mentors:rows});}
    return json(res,400,{error:"Unknown community type"});
   }
   if(req.method!=="POST"){res.setHeader("Allow","GET,POST");return json(res,405,{error:"Method not allowed"});}
