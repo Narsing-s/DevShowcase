@@ -23,10 +23,10 @@ function sessionUser(req){
   if(!raw)return null;
   const [payload,sig]=raw.split(".");
   if(!payload||!sig)return null;const expected=sign(payload);if(sig.length!==expected.length||!crypto.timingSafeEqual(Buffer.from(sig),Buffer.from(expected)))return null;
-  try{return JSON.parse(Buffer.from(payload,"base64url").toString())}catch{return null}
+  try{const u=JSON.parse(Buffer.from(payload,"base64url").toString());return u.exp&&u.exp>Date.now()?u:null}catch{return null}
 }
 function sessionCookie(user){
-  const payload=Buffer.from(JSON.stringify({id:user.id,login:user.login,avatar:user.avatar}),"utf8").toString("base64url");
+  const payload=Buffer.from(JSON.stringify({id:user.id,login:user.login,avatar:user.avatar,exp:Date.now()+7*24*60*60*1000}),"utf8").toString("base64url");
   return cookie("ds_session",payload+"."+sign(payload));
 }
 function json(res,status,data,headers={}){
