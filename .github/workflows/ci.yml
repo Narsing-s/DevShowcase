@@ -17,6 +17,10 @@ jobs:
       - name: Validate JavaScript
         shell: bash
         run: find api -name '*.js' -print0 | xargs -0 -n1 node --check
+      - name: Validate frontend JavaScript
+        run: node --check src/app.js
+      - name: Validate JSON configuration
+        run: node -e "for (const f of ['package.json','manifest.webmanifest','vercel.json']) JSON.parse(require('fs').readFileSync(f,'utf8')); console.log('JSON OK')"
       - name: Validate required files
         run: |
           test -f index.html
