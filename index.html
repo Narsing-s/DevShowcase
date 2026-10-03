@@ -123,22 +123,13 @@ async function renderCommunityCollections(){
  try{
   const [events,resources,mentors]=await Promise.all([communityGet("events"),communityGet("resources"),communityGet("mentors")]);
   window.devShowcaseCommunity={events:events.events||[],resources:resources.resources||[],mentors:mentors.mentors||[]};
-  document.querySelectorAll("[data-community-count]").forEach(el=>{const k=el.dataset.communityCount;el.textContent=(window.devShowcaseCommunity[k]||[]).length});
+  const ev=document.querySelector("#events .event-grid,#events .events-grid,#events .cards");
+  if(ev&&window.devShowcaseCommunity.events.length){ev.innerHTML=window.devShowcaseCommunity.events.map(x=>'<article class="platform-card"><div class="big">◷</div><h3>'+escHtml(x.title)+'</h3><p>'+escHtml(x.description||"Community event")+'</p><small>'+escHtml(x.starts_at?new Date(x.starts_at).toLocaleString():"Date to be announced")+' · '+escHtml(x.author||"community")+'</small>'+(x.url?'<div style="margin-top:12px"><a class="btn" href="'+escHtml(x.url)+'" target="_blank" rel="noreferrer">Open event →</a></div>':"")+'</article>').join("")}
+  const rs=document.querySelector("#resources .resource-grid,#resources .resources-grid,#resources .cards");
+  if(rs&&window.devShowcaseCommunity.resources.length){rs.innerHTML=window.devShowcaseCommunity.resources.map(x=>'<article class="platform-card"><div class="big">▣</div><h3>'+escHtml(x.title)+'</h3><p>'+escHtml(x.description||"Community resource")+'</p><span class="tag">'+escHtml(x.category)+'</span><div style="margin-top:12px"><a class="btn" href="'+escHtml(x.url)+'" target="_blank" rel="noreferrer">Open resource →</a></div></article>').join("")}
+  const mg=document.querySelector("#mentorship .mentor-grid");
+  if(mg&&window.devShowcaseCommunity.mentors.length){mg.innerHTML=window.devShowcaseCommunity.mentors.slice(0,12).map(x=>'<div class="mentor"><div class="mentor-top"><div class="mentor-avatar">'+escHtml((x.login||"?").slice(0,2).toUpperCase())+'</div><div><b>'+escHtml(x.login)+'</b><small style="display:block">'+escHtml(x.bio||"DevShowcase community member")+'</small></div></div><p>Connect with this community member for collaboration and mentorship.</p><div class="mentor-actions"><button class="btn" onclick="requestMentorId('+Number(x.id)+')">Connect</button>'+(x.website?'<a class="btn" href="'+escHtml(x.website)+'" target="_blank" rel="noreferrer">Profile</a>':"")+'</div></div>').join("")}
  }catch(e){console.warn("Community collections unavailable",e)}
-}
-async function joinOpportunityId(id){
- try{
-  const r=await fetch("/api/community?type=interest",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({opportunity_id:id})});
-  const x=await r.json();if(!r.ok)throw new Error(x.error||"Unable to save interest");
-  alert("Your interest was saved.");
- }catch(e){alert(e.message)}
-}
-async function requestMentorId(id){
- try{
-  const r=await fetch("/api/community?type=mentorship",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({mentor_id:id,topic:"Community mentorship",message:"I would like to connect through DevShowcase."})});
-  const x=await r.json();if(!r.ok)throw new Error(x.error||"Unable to send request");
-  alert("Mentorship request sent.");
- }catch(e){alert(e.message)}
 }
 function requestMentorship(name){alert("Select a mentor from the community directory to send a request.");}
 
