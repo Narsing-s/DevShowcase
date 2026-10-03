@@ -1,178 +1,458 @@
-# DevShowcase ✦
+# ✦ DevShowcase
 
-**Discover. Build. Showcase. Connect.**
+<p align="center">
+  <strong>Discover. Build. Showcase. Connect.</strong><br>
+  A modern open-source home for developer projects, builders, collaboration and community.
+</p>
 
-DevShowcase is a GitHub-first project discovery and developer community platform bringing projects, people, discussions, events, resources, mentorship, collaboration and opportunities into one modern experience.
+<p align="center">
+  <a href="https://github.com/Narsing-s/DevShowcase/actions">CI</a> ·
+  <a href="https://github.com/Narsing-s/DevShowcase/issues">Issues</a> ·
+  <a href="https://github.com/Narsing-s/DevShowcase/pulls">Pull Requests</a> ·
+  <a href="https://github.com/Narsing-s/DevShowcase/blob/main/LICENSE">License</a>
+</p>
 
-> An independent implementation inspired by modern open-source community patterns, with its own UI, data model and workflows.
+---
 
-## ✨ What you can do
+## 🌌 The idea
 
-| Area | Experience |
-|---|---|
-| 🔎 Discover | Search, filter and sort projects by category, technology, popularity and recency |
-| 🚀 Showcase | Submit projects, import public GitHub repositories and open project details |
-| ❤️ Personalize | Save favorites and share projects |
-| 👥 People | Explore GitHub members and developer profiles |
-| 💬 Community | Start discussions, reply with comments and view activity |
-| 🤝 Collaborate | Create collaboration requests and connect with builders |
-| 🎓 Mentorship | Request mentorship or offer yourself as a mentor |
-| 📅 Events | Publish community events and mark interest |
-| 📚 Resources | Publish and discover learning resources |
-| 🌱 Opportunities | Share open-source, hackathon, workshop and collaboration opportunities |
-| 🛡️ Moderation | Review project submissions with approve/reject workflows |
-| 📱 PWA | Responsive installable experience with offline-friendly local mode |
-| 🌙 UI | Modern responsive layout with dark/light theme support |
+DevShowcase is more than a project gallery.
 
-## 🧭 Product structure
+It is designed as a **developer discovery + community layer** where people can:
 
-DevShowcase follows a simple lifecycle:
+**Show what they built → discover other builders → start conversations → find collaborators → learn → participate → build again.**
 
-**Discover → Explore → Connect → Collaborate → Learn → Showcase**
+The experience combines project discovery, GitHub importing, developer profiles, social actions, discussions, mentorship, collaboration, opportunities, events and resources.
 
-### Main navigation
-- **Home** — product overview and featured content
-- **Projects** — searchable project showcase
-- **About** — platform mission and community direction
-- **Features** — platform capabilities
-- **Events** — community activities and workshops
-- **Community** — discussions, activity and notifications
-- **Team** — contributors and maintainers
-- **Contact** — contribution and issue-reporting paths
+---
 
-## 🧩 Architecture
+## ⚡ Product at a glance
+
+| 🧭 Discover | 🚀 Showcase | 🤝 Connect |
+|---|---|---|
+| Search & filters | Submit projects | Follow builders |
+| Categories & tags | GitHub import | Like projects |
+| Featured projects | Project details | Developer profiles |
+| Popularity & recency | Favorites & sharing | Discussions |
+
+| 🌱 Participate | 🧠 Learn | 🛡️ Operate |
+|---|---|---|
+| Opportunities | Mentorship | Moderation |
+| Events | Resources | GitHub OAuth |
+| Collaboration | Community discussions | PostgreSQL / Neon |
+| Event interest | Comments & activity | Security headers |
+
+---
+
+## ✨ Core experience
+
+### 🔎 Project discovery
+- Search by name, description, author, category and technology.
+- Sort by newest, popularity and other showcase signals.
+- Browse featured projects and technology tags.
+- Open GitHub repositories and optional live demos.
+- Refresh public GitHub metadata.
+
+### 📦 Project publishing
+- Submit a project for moderation.
+- Validate GitHub repository URLs.
+- Prevent duplicate repository submissions.
+- Support optional live-demo URLs.
+- Import public repositories directly from GitHub.
+
+### 👤 Developer profiles
+- GitHub-backed identity.
+- Profile avatar, bio and website.
+- Follower/following relationships.
+- Published project collection.
+- Project likes and community activity.
+
+### 💬 Community
+- Start discussions.
+- Comment on discussions.
+- Browse activity.
+- Receive notifications.
+- Connect discussion topics with projects.
+
+### 🤝 Collaboration
+Create structured collaboration requests with:
+- title
+- details
+- technology
+- profile/project URL
+- open status
+
+### 🎓 Mentorship
+- Become a mentor.
+- Add mentorship expertise.
+- Maintain a mentor profile.
+- Request mentorship from community members.
+- Prevent duplicate pending mentorship requests.
+
+### 🌱 Opportunities
+Create and discover:
+- Open-source contribution opportunities
+- Collaboration opportunities
+- Hackathons
+- Workshops
+- Mentorship opportunities
+
+### 📅 Events & 📚 Resources
+- Publish community events.
+- Add event dates and links.
+- Mark event interest.
+- Publish learning resources.
+- Organize resources by category.
+
+---
+
+## 📴 Local Test Mode
+
+No database? No problem.
+
+When the backend is unavailable, DevShowcase can switch to a **device-local test account** using browser storage.
+
+Local workflows cover:
+
+- Projects
+- Favorites
+- Discussions
+- Comments
+- Likes
+- Follows
+- Opportunities
+- Opportunity interests
+- Events
+- Event attendance
+- Resources
+- Mentorship
+- Mentor profiles
+- Collaboration requests
+- Activity
+- Notifications
+- Local moderation
+
+The UI also exposes **Export local data** and **Reset local data** controls.
+
+> Local Test Mode is intended for development/demo testing. It is not a replacement for server-side authentication or shared production persistence.
+
+---
+
+## 🏗️ Architecture
 
 ```text
-DevShowcase
-├── index.html              # Main application shell
-├── src/app.js              # Frontend application logic
-├── src/styles.css          # Design system and responsive UI
-├── src/components/         # Migration-friendly component structure
-├── src/pages/              # Page structure
-├── src/hooks/              # Hook structure
-├── src/lib/                # Shared frontend utilities
-├── api/                    # Serverless API endpoints
-├── schema.sql              # PostgreSQL/Neon schema
-├── manifest.webmanifest    # PWA metadata
-├── sw.js                   # Service worker
-├── vercel.json             # Security configuration
-└── .github/workflows/ci.yml# CI validation
+┌──────────────────────────────────────────────────────────────┐
+│                         DevShowcase                           │
+├──────────────────────────────────────────────────────────────┤
+│  Responsive UI · Dark/Light · PWA · Local Test Mode          │
+├──────────────────────────────────────────────────────────────┤
+│  Projects · Profiles · Community · Events · Resources        │
+│  Mentorship · Collaboration · Opportunities · Social        │
+├──────────────────────────────────────────────────────────────┤
+│  Serverless API · GitHub OAuth · Security Middleware         │
+├──────────────────────────────────────────────────────────────┤
+│                         PostgreSQL / Neon                     │
+└──────────────────────────────────────────────────────────────┘
 ```
 
-The current frontend intentionally stays lightweight and framework-free while retaining a migration-friendly `src/` structure.
+### Repository structure
 
-## 💾 Operating modes
+```text
+DevShowcase/
+├── index.html
+├── src/
+│   ├── app.js
+│   ├── styles.css
+│   ├── components/
+│   ├── layouts/
+│   ├── pages/
+│   ├── hooks/
+│   └── lib/
+├── api/
+│   ├── _lib.js
+│   ├── projects.js
+│   ├── project.js
+│   ├── profile.js
+│   ├── social.js
+│   ├── community.js
+│   ├── community/comments.js
+│   ├── activity.js
+│   ├── notifications.js
+│   ├── health.js
+│   ├── admin/projects.js
+│   └── auth/
+├── schema.sql
+├── manifest.webmanifest
+├── sw.js
+├── vercel.json
+├── docs/
+└── .github/
+```
 
-### Server mode
-Shared production data uses PostgreSQL/Neon and GitHub OAuth.
+The frontend is intentionally lightweight today. The `src/` structure keeps the codebase ready for a future component-framework migration without requiring one now.
 
-Required environment variables are documented in `.env.example`:
-- `DATABASE_URL`
-- `SESSION_SECRET`
-- `GITHUB_CLIENT_ID`
-- `GITHUB_CLIENT_SECRET`
-- `APP_URL`
-- `ADMIN_GITHUB_LOGINS`
-- `DB_INIT_SECRET`
+---
 
-Apply the complete `schema.sql` before using production API features.
+## 🔐 Security model
 
-### Local Test Mode
-If the API/database is unavailable, DevShowcase automatically switches to a device-local test account and persists supported interactions in `localStorage`.
+DevShowcase includes several defensive layers:
 
-Supported local flows include project submissions, favorites, discussions, comments, opportunities, opportunity interests, events, event interest, resources, mentorship requests, collaboration requests, likes/follows, activity, notifications and local moderation.
+- Signed, expiring HTTP-only sessions.
+- Secure/SameSite session-cookie configuration.
+- GitHub OAuth state validation.
+- Server-side authentication checks.
+- Admin allow-list support.
+- GitHub hostname validation.
+- Project duplicate protection.
+- Input length and payload validation.
+- Security response headers.
+- HSTS configuration.
+- Non-GET requests excluded from service-worker caching.
+- Health endpoint that avoids exposing raw database errors.
 
-Local data also has JSON export/reset helpers. Local mode is device-specific and is not a replacement for server-side authentication or a shared production database.
+For security reports, see **[SECURITY.md](SECURITY.md)**.
 
-## 🔐 Security
+---
 
-- Signed, expiring HTTP-only session cookies
-- GitHub OAuth state validation
-- Server-side authentication and admin checks
-- Input validation for project submissions
-- GitHub repository hostname validation
-- Duplicate-safe project submission
-- Security headers and HTTPS/HSTS configuration
-- Service worker avoids caching non-GET API requests
-- Health endpoint avoids exposing raw database errors
+## 🗃️ Database
 
-See `SECURITY.md` for vulnerability reporting.
+The PostgreSQL schema includes:
 
-## 🗃️ Data model
+```text
+users
+projects
+follows
+project_likes
+discussions
+discussion_comments
+notifications
+activity
+opportunities
+opportunity_interests
+mentorship_requests
+mentor_profiles
+collaboration_requests
+resources
+events
+event_attendees
+```
 
-`schema.sql` covers users, projects, follows, project likes, discussions, comments, notifications, activity, opportunities, opportunity interests, mentorship requests, resources and events.
+Foreign keys, cascade rules and useful indexes are included in `schema.sql`.
 
-## 🔌 API surface
+---
 
-### Projects
-GET /api/projects
-POST /api/projects
+## 🔌 API map
 
-### Community
-GET /api/community
-POST /api/community
-GET /api/community?type=opportunities|resources|events|mentors
-POST /api/community?type=opportunities|interest|resources|events|mentorship
+| Endpoint | Purpose |
+|---|---|
+| `GET /api/projects` | Approved project discovery |
+| `POST /api/projects` | Submit a project |
+| `GET /api/project?id=...` | Project details |
+| `POST /api/project?id=...` | Increment project view |
+| `GET /api/profile?login=...` | Developer profile |
+| `POST /api/social` | Follow/unfollow and like/unlike |
+| `GET/POST /api/community` | Discussions and community collections |
+| `GET/POST /api/community?type=...` | Events, resources, opportunities, mentors, collaboration and mentorship |
+| `GET/POST /api/community/comments` | Discussion comments |
+| `GET /api/activity` | Community activity |
+| `GET/PATCH /api/notifications` | Notifications |
+| `GET /api/me` | Current session |
+| `GET /api/health` | Database health |
+| `GET/PATCH /api/admin/projects` | Moderation |
 
-### Social
-POST /api/social — follow/unfollow and like/unlike
+---
 
-### Comments
-GET /api/community/comments?discussionId=<id>
-POST /api/community/comments
+## 🚀 Quick start
 
-### Platform
-GET /api/activity
-GET /api/notifications
-PATCH /api/notifications
-GET /api/profile?login=<github-login>
-GET /api/health
-GET /api/admin/projects
-PATCH /api/admin/projects
+### Requirements
 
-## 🚀 Getting started
+- Node.js **20+**
+- PostgreSQL / Neon for shared server mode
+- GitHub OAuth application for sign-in
+- A serverless-capable deployment environment for API routes
 
-Requirements: Node.js 20+, PostgreSQL/Neon for shared server mode, a GitHub OAuth application, and a deployment platform that supports Node.js serverless functions.
+### 1. Clone
 
-1. Create a PostgreSQL/Neon database.
-2. Apply `schema.sql`.
-3. Configure `.env.example` values.
-4. Configure the GitHub OAuth callback as `<APP_URL>/api/auth/github/callback`.
-5. Deploy the repository.
-6. Open the application in a fresh browser session.
-7. Check `/api/health` for database connectivity.
+```bash
+git clone https://github.com/Narsing-s/DevShowcase.git
+cd DevShowcase
+```
 
-## 🧪 Quality checks
+### 2. Install
 
-The GitHub Actions workflow validates JavaScript syntax, frontend syntax, JSON configuration, required files and Node.js compatibility.
-
-Recommended checks:
 ```bash
 npm install --ignore-scripts
+```
+
+### 3. Configure environment
+
+Copy `.env.example` into your deployment environment and configure:
+
+```text
+DATABASE_URL
+SESSION_SECRET
+GITHUB_CLIENT_ID
+GITHUB_CLIENT_SECRET
+APP_URL
+ADMIN_GITHUB_LOGINS
+DB_INIT_SECRET
+```
+
+### 4. Prepare the database
+
+Run the complete `schema.sql` against your PostgreSQL/Neon database.
+
+### 5. Configure GitHub OAuth
+
+Set the callback URL to:
+
+```text
+<APP_URL>/api/auth/github/callback
+```
+
+### 6. Run validation
+
+```bash
 node --check src/app.js
 find api -name '*.js' -print0 | xargs -0 -n1 node --check
 ```
 
-## 🤝 Open-source workflow
+Then serve the repository with your preferred local static/serverless development environment.
 
-Fork → Branch → Build → Validate → Pull Request → Review → Merge
+---
 
-See `docs/CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md` and `.github/ISSUE_TEMPLATE/`.
+## 🧪 CI
+
+GitHub Actions validates:
+
+- Node.js compatibility
+- Frontend JavaScript syntax
+- API JavaScript syntax
+- JSON configuration
+- Required application files
+
+Workflow:
+
+```text
+Commit / Pull Request
+        ↓
+Install dependencies
+        ↓
+Validate JavaScript
+        ↓
+Validate configuration
+        ↓
+Validate required files
+        ↓
+Ready for review
+```
+
+---
+
+## 🧭 Product navigation
+
+```text
+Home
+ ├─ Projects
+ ├─ About
+ ├─ Features
+ ├─ Events
+ ├─ Community
+ ├─ Team
+ └─ Contact
+
+Community
+ ├─ Discussions
+ ├─ Collaboration
+ ├─ Mentorship
+ ├─ Opportunities
+ ├─ Events
+ └─ Resources
+```
+
+---
 
 ## 🗺️ Roadmap
 
-**Current:** discovery, community workflows, Local Test Mode, Neon backend, GitHub authentication, PWA and moderation.
+### 🟢 Foundation
+- [x] Project discovery
+- [x] GitHub import
+- [x] Favorites
+- [x] Social actions
+- [x] Discussions and comments
+- [x] Events and resources
+- [x] Mentorship
+- [x] Collaboration
+- [x] Opportunities
+- [x] Moderation
+- [x] GitHub OAuth
+- [x] PostgreSQL/Neon schema
+- [x] Local Test Mode
+- [x] PWA support
+- [x] Security hardening
 
-**Next:** richer profiles, project collections, saved searches, richer notifications, collaboration inbox, event registration records and improved moderation.
+### 🟡 Expansion
+- [ ] Rich project collections
+- [ ] Saved searches
+- [ ] Collaboration inbox
+- [ ] Rich notification center
+- [ ] Event registration management
+- [ ] Advanced moderation dashboard
+- [ ] Better project analytics
 
-**Future:** framework component migration, advanced analytics, realtime community features and expanded integrations.
+### 🔵 Long term
+- [ ] Realtime collaboration
+- [ ] Advanced discovery/recommendation
+- [ ] More integrations
+- [ ] Framework-based component migration
+- [ ] Expanded developer analytics
 
-## 📌 Repository
+---
 
-https://github.com/Narsing-s/DevShowcase
+## 🤝 Contributing
 
-## 📄 License
+DevShowcase is built to be extended by developers.
 
-See `LICENSE` for the repository's current open-source license.
+```text
+Fork
+ ↓
+Branch
+ ↓
+Build
+ ↓
+Validate
+ ↓
+Pull Request
+ ↓
+Review
+ ↓
+Merge
+```
 
-**DevShowcase — discover great work, meet the builders, and turn projects into collaboration.**
+Before contributing, read:
+
+- [CONTRIBUTING](docs/CONTRIBUTING.md)
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Security](SECURITY.md)
+- [Issue templates](.github/ISSUE_TEMPLATE/)
+
+---
+
+## 📁 Project links
+
+- **Repository:** https://github.com/Narsing-s/DevShowcase
+- **Issues:** https://github.com/Narsing-s/DevShowcase/issues
+- **Pull requests:** https://github.com/Narsing-s/DevShowcase/pulls
+
+---
+
+## 📜 License
+
+See [LICENSE](LICENSE) for the repository's current license.
+
+---
+
+<p align="center">
+  <strong>✦ DevShowcase</strong><br>
+  <sub>Show your work. Find your people. Build what's next.</sub>
+</p>
