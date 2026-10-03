@@ -1,6 +1,10 @@
 const {db,json}=require("../_lib");
 module.exports=async(req,res)=>{
  if(req.method!=="POST")return json(res,405,{error:"POST required"});
+ const expected=process.env.DB_INIT_SECRET;
+ if(!expected)return json(res,503,{error:"DB initialization is disabled until DB_INIT_SECRET is configured"});
+ const supplied=(req.headers["x-db-init-secret"]||"").toString();
+ if(!supplied||supplied!==expected)return json(res,401,{error:"Unauthorized"});
  try{
   const sql=db();
   await sql`CREATE TABLE IF NOT EXISTS users (id BIGSERIAL PRIMARY KEY, github_id TEXT UNIQUE NOT NULL, login TEXT NOT NULL, avatar TEXT, created_at TIMESTAMPTZ DEFAULT now(), updated_at TIMESTAMPTZ DEFAULT now())`;
