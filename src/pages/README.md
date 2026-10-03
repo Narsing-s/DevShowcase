@@ -1,0 +1,2 @@
+# Pages
+Route-level page composition. The current deployment remains a static-compatible single entry point; these boundaries document the migration path without breaking the existing Vercel serverless API.
